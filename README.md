@@ -125,7 +125,7 @@ Exiting.
 You can turn on debug mode by using the -w option of the Ruby VM:
 
 ```ruby
-/tmp/arnoldc.rb  [±] λ ruby arnoldc.rb samples/fizzbuzz.arnoldc
+/tmp/arnoldc.rb  [±] λ ruby -w arnoldc.rb samples/fizzbuzz.arnoldc
 arnoldc.rb...
 L0000: def main
 L0001: isLessThan100 = true
