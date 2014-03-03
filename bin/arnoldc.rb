@@ -1,4 +1,7 @@
 #!/usr/bin/env ruby
+$:<< 'lib'
+require 'tokens'
+
 # COMPUTE FILE NAME
 filename = ARGV.fetch(0) { raise ArgumentError, 'You should provide a script name. eg: ./arnoldc.rb my_file.arnoldc' }
 
@@ -9,50 +12,50 @@ data = File.read(filename)
 data.gsub!(/^\s*(.*)/) { $1 }
 
 # MAIN PROGRAM
-data.gsub!(/IT'S SHOWTIME/,"def main")
-data.gsub!(/(HASTA LA VISTA, BABY|CHILL|YOU HAVE BEEN TERMINATED|YOU HAVE NO RESPECT FOR LOGIC)/,"end")
+data.gsub!(/#{BeginMain}/,"def main")
+data.gsub!(/#{EndMethodDeclaration}|#{EndWhile}|#{EndMain}|#{EndIf}/,"end")
 
 # MACROS
-data.gsub!(/@NO PROBLEMO/,"true")
-data.gsub!(/@I LIED/,"false")
+data.gsub!(/@#{True}/,"true")
+data.gsub!(/@#{False}/,"false")
 
 # CONDITIONALS
-data.gsub!(/BECAUSE I'M GOING TO SAY PLEASE (\w*)/) { "if #{$1}" }
-data.gsub!(/BULLSHIT/,"else")
+data.gsub!(/#{If} (\w*)/) { "if #{$1}" }
+data.gsub!(/#{Else}/,"else")
 
 # LOOP
-data.gsub!(/STICK AROUND (\w*)/) { "while #{$1}" }
+data.gsub!(/#{While} (\w*)/) { "while #{$1}" }
 
 # ASSIGNMENTS
-data.gsub!(/HEY CHRISTMAS TREE (\w+)\nYOU SET US UP (\w*)/) { "#{$1} = #{$2}" }
-data.gsub!(/GET TO THE CHOPPER (\w+)/) { "#{$1} = \\" }
-data.gsub!(/GET YOUR ASS TO MARS (\w+)/) { "#{$1} = \\" }
+data.gsub!(/#{DeclareInt} (\w+)\n#{SetInitialValue} (\w*)/) { "#{$1} = #{$2}" }
+data.gsub!(/#{AssignVariable} (\w+)/) { "#{$1} = \\" }
+data.gsub!(/#{AssignVariableFromMethodCall} (\w+)/) { "#{$1} = \\" }
 
 # METHODS
-data.gsub!(/LISTEN TO ME VERY CAREFULLY (\w+)/) { "def #{$1}(" }
-data.gsub!(/I NEED YOUR CLOTHES YOUR BOOTS AND YOUR MOTORCYCLE (\w+)/) { "#{$1}," }
+data.gsub!(/#{DeclareMethod} (\w+)/) { "def #{$1}(" }
+data.gsub!(/#{MethodArguments} (\w+)/) { "#{$1}," }
 
 # METHOD CALLS
-data.gsub!(/DO IT NOW (\w*) (\w+) (\w+)/) { "#{$1}(#{$2}, #{$3})" }
-data.gsub!(/HERE IS MY INVITATION (\w+)/) { "#{$1}\\" }
+data.gsub!(/#{CallMethod} (\w*) (\w+) (\w+)/) { "#{$1}(#{$2}, #{$3})" }
+data.gsub!(/#{SetValue} (\w+)/) { "#{$1}\\" }
 
 # ARITHMETICS
-data.gsub!(/GET DOWN (\w+)/) { "- #{$1}" }
-data.gsub!(/GET UP (\w+)/) { "+ #{$1}" }
-data.gsub!(/YOU'RE FIRED (\w+)/) { "* #{$1}" }
-data.gsub!(/HE HAD TO SPLIT (\w+)/) { "* 1/#{$1}" }
+data.gsub!(/#{MinusOperator} (\w+)/) { "- #{$1}" }
+data.gsub!(/#{PlusOperator} (\w+)/) { "+ #{$1}" }
+data.gsub!(/#{MultiplicationOperator} (\w+)/) { "* #{$1}" }
+data.gsub!(/#{DivisionOperator} (\w+)/) { "* 1/#{$1}" }
 
 # COMPARISONS
-data.gsub!(/YOU ARE NOT YOU YOU ARE ME (\w+)/) { "== #{$1}" }
-data.gsub!(/LET OFF SOME STEAM BENNET (\w+)/) { "> #{$1}" }
-data.gsub!(/CONSIDER THAT A DIVORCE (\w+)/) { "|| #{$1}" }
-data.gsub!(/KNOCK KNOCK (\w+)/) { "&& #{$1}" }
+data.gsub!(/#{EqualTo} (\w+)/) { "== #{$1}" }
+data.gsub!(/#{GreaterThan} (\w+)/) { "> #{$1}" }
+data.gsub!(/#{Or} (\w+)/) { "|| #{$1}" }
+data.gsub!(/#{And} (\w+)/) { "&& #{$1}" }
 
 # HACKS :-D
-data.gsub!(/ENOUGH TALK/) { "" }
-data.gsub!(/GIVE THESE PEOPLE AIR/) { "unused=0)" }
-data.gsub!(/I'LL BE BACK (\w+)/) { "return #{$1}" }
-data.gsub!(/TALK TO THE HAND (.*)/) { "puts #{$1}" }
+data.gsub!(/#{EndAssignVariable}/) { "" }
+data.gsub!(/#{NonVoidMethod}/) { "unused=0)" }
+data.gsub!(/#{Return} (\w+)/) { "return #{$1}" }
+data.gsub!(/#{Print} (.*)/) { "puts #{$1}" }
 
 # WRAPPING THE SH*T UP
 locs = data.split("\n").reject { |l| l.empty? } + ["main"]
