@@ -5,7 +5,7 @@ module ArnoldC
       @filename = filename || raise(ArgumentError, 'You should provide a script name. eg: ./arnoldc.rb my_file.arnoldc')
     end
 
-    def execute
+    def execute(verbose)
       # READ FILE
       data = File.read(@filename)
 
@@ -60,17 +60,14 @@ module ArnoldC
 
       # WRAPPING THE SH*T UP
       locs = data.split("\n").reject { |l| l.empty? } + ["main"]
-      data = locs.map.with_index { |l,i| "L%04d: %s" % [i, l] }.join("\n")
 
       code = locs.join("\n")
-      puts "arnoldc.rb..."
-      puts data if $-w
-      puts
 
-      eval(code)
-
-      puts "\nExiting."
+      if verbose
+        puts locs.map.with_index { |l,i| "L%04d: %s" % [i, l] }.join("\n")
       end
 
+      eval(code)
+    end
   end
 end

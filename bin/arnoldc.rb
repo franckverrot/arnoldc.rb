@@ -3,4 +3,9 @@ $:<< 'lib'
 require 'parser'
 
 parser = ArnoldC::Parser.new(ARGV[0])
-parser.execute
+
+puts "\narnoldc.rb..."
+
+parser.execute($-w)
+
+puts "\n\nExiting."
