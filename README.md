@@ -4,7 +4,7 @@
 
 ## INSTALLATION
 
-    gem install arnoldc
+    gem install arnoldc.rb
 
 ## USAGE
 
