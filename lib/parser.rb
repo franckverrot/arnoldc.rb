@@ -35,6 +35,7 @@ module ArnoldC
       # METHODS
       data.gsub!(/#{DeclareMethod} (\w+)/) { "def #{$1}(" }
       data.gsub!(/#{MethodArguments} (\w+)/) { "#{$1}," }
+      data.gsub!(/#{ImportLibrary} (.*)/) { "require '#{$1}'"
 
       # METHOD CALLS
       data.gsub!(/#{CallMethod} (\w*) (\w+) (\w+)/) { "#{$1}(#{$2}, #{$3})" }
