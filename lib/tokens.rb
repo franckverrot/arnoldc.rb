@@ -1,4 +1,4 @@
-DeclareInt = "HEY CHRISTMAS TREE"
+DeclareInt = "HEY, CHRISTMAS TREE"
 SetInitialValue = "YOU SET US UP"
 BeginMain = "IT'S SHOWTIME"
 PlusOperator = "GET UP"
